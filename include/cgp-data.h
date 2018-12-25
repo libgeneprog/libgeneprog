@@ -28,6 +28,16 @@ typedef struct _GP_CGPData
 GP_Gene* GP_CGP_alloc(unsigned int num_in,
                       unsigned int num_mid,
                       unsigned int num_out);
+/**
+ * Initializes a CGP_Gene. Useful if you handled the malloc/calloc yourself
+ * Make sure to call GP_CGP_free() after you're done using it.
+ * @see GP_CGP_free()
+ */
+
+void GP_CGP_init(GP_Gene *gene,
+                 unsigned int num_in,
+                 unsigned int num_mid,
+                 unsigned int num_out);
 
 /**
  * Frees a previously created CGP Gene

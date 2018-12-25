@@ -13,6 +13,22 @@ GP_Gene* GP_CGP_alloc(unsigned int num_in,
 	assert(num_out > 0);
 
 	GP_Gene* gene = malloc(sizeof(GP_Gene));
+
+	GP_CGP_init(gene, num_in, num_mid, num_out);
+
+	return gene;
+}
+
+void GP_CGP_init(GP_Gene *gene,
+                 unsigned int num_in,
+                 unsigned int num_mid,
+                 unsigned int num_out)
+{
+	// Make sure we're not doing anything wrong:
+	assert(num_in > 0);
+	assert(num_mid > 0);
+	assert(num_out > 0);
+
 	// Set up data:
 	GP_CGPData* data = malloc(sizeof(GP_CGPData));
 	data->num_inputs = num_in;
@@ -25,7 +41,6 @@ GP_Gene* GP_CGP_alloc(unsigned int num_in,
 	gene->data = data;
 	// Set up functions:
 	gene->evaluate = GP_CGP_evaluate;
-	return gene;
 }
 
 void GP_CGP_free(GP_Gene* gene)
