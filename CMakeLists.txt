@@ -6,13 +6,16 @@ add_library(geneprog SHARED
 
 set_target_properties(geneprog PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(geneprog PROPERTIES SOVERSION 0)
-set_target_properties(geneprog PROPERTIES PUBLIC_HEADER 
-	include/cgp-data.h
-)
+
+# We don't have a *single* header. We have multiple
+#set_target_properties(geneprog PROPERTIES PUBLIC_HEADER "include/cgp-data.h include/gene.h")
+file(GLOB_RECURSE _HEADERS "include/*.h")
 
 target_include_directories(geneprog PRIVATE include)
 
 include(GNUInstallDirs)
 install(TARGETS geneprog
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/geneprog)
+)
+#	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/geneprog)
+install(FILES ${_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/geneprog)
