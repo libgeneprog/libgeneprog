@@ -11,6 +11,9 @@ set_target_properties(geneprog PROPERTIES SOVERSION 0)
 #set_target_properties(geneprog PROPERTIES PUBLIC_HEADER "include/cgp-data.h include/gene.h")
 file(GLOB_RECURSE _HEADERS "include/*.h")
 
+# Set up the pkg-config file:
+configure_file(geneprog.pc.in geneprog.pc @ONLY)
+
 target_include_directories(geneprog PRIVATE include)
 
 include(GNUInstallDirs)
@@ -19,3 +22,7 @@ install(TARGETS geneprog
 )
 #	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/geneprog)
 install(FILES ${_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/geneprog)
+
+#Install the pkg-config file
+install(FILES ${CMAKE_BINARY_DIR}/geneprog.pc
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
