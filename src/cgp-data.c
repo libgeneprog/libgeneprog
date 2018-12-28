@@ -66,6 +66,44 @@ void GP_CGP_free(GP_Gene* gene)
 	free(gene);
 }
 
+double _GP_CGP_evaluate_node(GP_CGPData* data, double* in, unsigned int node_idx)
+{
+	//Is the node_idx an input node?
+	if(node_idx < data->num_inputs)
+		return in[node_idx];
+	// Alright, not an input node. Must be a middle node then
+	unsigned int middle_node_idx = node_idx - data->num_inputs;
+	unsigned int left_source = data->middle_node_left_sources[middle_node_idx];
+	unsigned int right_source = data->middle_node_right_sources[middle_node_idx];
+	enum GP_CGPNodeOp op = data->middle_node_ops[middle_node_idx];
+	double left = _GP_CGP_evaluate_node(data, in, left_source);
+	double right = _GP_CGP_evaluate_node(data, in, right_source);
+	if(op == CGPNodeOpAdd){
+		return left + right;
+	}
+	else if(op == CGPNodeOpSubtract){
+		return left - right;
+	}
+	else if(op == CGPNodeOpMultiply){
+		return left * right;
+	}
+	else if(op == CGPNodeOpDivide){
+		// TODO: Figure out a better way to handle N / 0
+		// Ideally, end user should have say in how this is handled via a configuration.
+		if(right == 0)
+			return left;
+		return left / right;
+	}
+	else if(op == CGPNodeOpLeftOnly){
+		return left;
+	}
+	else if(op == CGPNodeOpRightOnly){
+		return right;
+	}
+	// TODO: Fail spectacularly (not supposed to make it here)
+	return right;
+}
+
 void GP_CGP_evaluate(double* in, double* out, void *data)
 {
 	GP_CGPData* cgpdata = (GP_CGPData*) data;
@@ -76,7 +114,9 @@ void GP_CGP_evaluate(double* in, double* out, void *data)
 	assert(cgpdata->output_nodes != NULL);
 	for(int i = 0; i < cgpdata->num_outputs; i++)
 	{
-		out[i] = i;
+		unsigned int out_source = cgpdata->output_nodes[i];
+		double result = _GP_CGP_evaluate_node(cgpdata, in, out_source);
+		out[i] = result;
 	}
 }
 

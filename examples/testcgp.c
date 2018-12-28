@@ -2,16 +2,21 @@
 #include "geneprog/cgp-data.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 int main()
 {
+	printf("Seeding RNG\n");
+	srand(time(NULL));
+
 	printf("Making CGP Gene\n");
 	GP_Gene* gene = GP_CGP_alloc(3, 3, 3);
 
 	printf("Randomizing CGP Gene\n");
 	GP_CGP_randomize(gene);
 
-	double in[3];
+	double in[3] = {1,2,3};
 	double out[3];
 
 	printf("Evaluating gene\n");
