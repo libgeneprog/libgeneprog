@@ -7,8 +7,8 @@
 
 int main()
 {
-	printf("Seeding RNG\n");
-	srand(time(NULL));
+	//printf("Seeding RNG\n");
+	//srand(time(NULL));
 
 	printf("Making CGP Gene\n");
 	GP_Gene* gene = GP_CGP_alloc(3, 3, 3);
