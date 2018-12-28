@@ -14,7 +14,8 @@ enum GP_CGPNodeOp
 	CGPNodeOpMultiply,
 	CGPNodeOpDivide,
 	CGPNodeOpLeftOnly,
-	CGPNodeOpRightOnly
+	CGPNodeOpRightOnly,
+	CGPNodeOpNumOps //For picking random value
 };
 
 typedef struct _GP_CGPData

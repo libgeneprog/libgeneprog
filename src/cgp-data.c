@@ -2,6 +2,9 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <stdio.h>
+
+//TODO: Need a logging method of some sort...
 
 GP_Gene* GP_CGP_alloc(unsigned int num_in,
                       unsigned int num_mid,
@@ -66,9 +69,48 @@ void GP_CGP_free(GP_Gene* gene)
 void GP_CGP_evaluate(double* in, double* out, void *data)
 {
 	GP_CGPData* cgpdata = (GP_CGPData*) data;
+	// We *must* have nodes to continue:
+	assert(cgpdata->middle_node_left_sources != NULL);
+	assert(cgpdata->middle_node_right_sources != NULL);
+	assert(cgpdata->middle_node_ops != NULL);
+	assert(cgpdata->output_nodes != NULL);
 	for(int i = 0; i < cgpdata->num_outputs; i++)
 	{
 		out[i] = i;
 	}
+}
+
+void GP_CGP_randomize(GP_Gene* gene)
+{
+	GP_CGPData* cgpdata = (GP_CGPData*) gene->data;
+	unsigned int num_in = cgpdata->num_inputs;
+	unsigned int num_mid = cgpdata->num_middle_nodes;
+	unsigned int num_out= cgpdata->num_outputs;
+	// See if we need to alloc our nodes:
+	if(cgpdata->middle_node_left_sources == NULL)
+		cgpdata->middle_node_left_sources = malloc(sizeof(unsigned int) * num_mid);
+	if(cgpdata->middle_node_right_sources == NULL)
+		cgpdata->middle_node_right_sources = malloc(sizeof(unsigned int) * num_mid);
+	if(cgpdata->middle_node_ops == NULL)
+		cgpdata->middle_node_ops = malloc(sizeof(enum GP_CGPNodeOp) * num_mid);
+	if(cgpdata->output_nodes == NULL)
+		cgpdata->output_nodes= malloc(sizeof(unsigned int) * num_out);
+
+	// Go through and set up our middle nodes:
+	for(int i=0; i<num_mid; i++){
+		unsigned int source_left = rand() % (num_in + i);
+		unsigned int source_right = rand() % (num_in + i);
+		cgpdata->middle_node_left_sources[i] = source_left;
+		cgpdata->middle_node_right_sources[i] = source_right;
+		enum GP_CGPNodeOp op = (enum GP_CGPNodeOp) (rand() % CGPNodeOpNumOps);
+		cgpdata->middle_node_ops[i] = op;
+	}
+
+	// Go through and set up our output nodes:
+	for(int i=0; i<num_out; i++){
+		unsigned int source = rand() % (num_in + num_mid);
+		cgpdata->output_nodes[i] = source;
+	}
+
 }
 

@@ -8,6 +8,9 @@ int main()
 	printf("Making CGP Gene\n");
 	GP_Gene* gene = GP_CGP_alloc(3, 3, 3);
 
+	printf("Randomizing CGP Gene\n");
+	GP_CGP_randomize(gene);
+
 	double in[3];
 	double out[3];
 
