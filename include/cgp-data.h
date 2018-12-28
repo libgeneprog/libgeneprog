@@ -7,14 +7,27 @@
 extern "C" {
 #endif
 
+enum GP_CGPNodeOp
+{
+	CGPNodeOpAdd,
+	CGPNodeOpSubtract,
+	CGPNodeOpMultiply,
+	CGPNodeOpDivide,
+	CGPNodeOpLeftOnly,
+	CGPNodeOpRightOnly
+};
+
 typedef struct _GP_CGPData
 {
 	unsigned int num_inputs;
 	unsigned int num_middle_nodes;
 	unsigned int num_outputs;
 
-	//NOTE: Size will be 3 * num_middle_nodes
-	unsigned int* middle_nodes;
+	//NOTE: Sizes will be num_middle_nodes
+	unsigned int* middle_node_left_sources;
+	unsigned int* middle_node_right_sources;
+	enum GP_CGPNodeOp* middle_node_ops;
+	
 	//NOTE: Size will be num_outputs
 	unsigned int* output_nodes;
 } GP_CGPData;
@@ -46,6 +59,8 @@ void GP_CGP_init(GP_Gene *gene,
 void GP_CGP_free(GP_Gene* gene);
 
 void GP_CGP_evaluate(double* in, double* out, void *data);
+
+void GP_CGP_randomize(GP_Gene* gene);
 
 #if defined(__cplusplus) || defined(c_plusplus)
 }

@@ -36,7 +36,9 @@ void GP_CGP_init(GP_Gene *gene,
 	data->num_outputs = num_out;
 	//TODO: Build the middle/output nodes
 	// For now though, set to null:
-	data->middle_nodes = NULL;
+	data->middle_node_left_sources = NULL;
+	data->middle_node_right_sources = NULL;
+	data->middle_node_ops = NULL;
 	data->output_nodes = NULL;
 	gene->data = data;
 	// Set up functions:
@@ -46,7 +48,15 @@ void GP_CGP_init(GP_Gene *gene,
 void GP_CGP_free(GP_Gene* gene)
 {
 	GP_CGPData* cgpdata = (GP_CGPData*)(gene->data);
-	//TODO: Free the nodes
+	// Free the nodes:
+	if(cgpdata->middle_node_left_sources != NULL)
+		free(cgpdata->middle_node_left_sources);
+	if(cgpdata->middle_node_right_sources != NULL)
+		free(cgpdata->middle_node_right_sources);
+	if(cgpdata->middle_node_ops != NULL)
+		free(cgpdata->middle_node_ops);
+	if(cgpdata->output_nodes != NULL)
+		free(cgpdata->output_nodes);
 	// Free the data:
 	free(gene->data);
 	// Free the gene itself:
