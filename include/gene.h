@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
 #ifndef _GENEPROG_GENE_H_
 #define _GENEPROG_GENE_H_
 
@@ -5,11 +6,10 @@
 extern "C" {
 #endif
 
-typedef struct _GP_Gene
-{
-	void* data;
-	void (*evaluate)(double* in, double* out, void* data);
-} GP_Gene;
+struct GP_Gene {
+	void *data;
+	void (*evaluate)(double *in, double *out, void *data);
+};
 
 
 #if defined(__cplusplus) || defined(c_plusplus)

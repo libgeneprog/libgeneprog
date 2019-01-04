@@ -11,7 +11,7 @@ int main()
 	//srand(time(NULL));
 
 	printf("Making CGP Gene\n");
-	GP_Gene* gene = GP_CGP_alloc(3, 3, 3);
+	struct GP_Gene* gene = GP_CGP_alloc(3, 3, 3);
 
 	printf("Randomizing CGP Gene\n");
 	GP_CGP_randomize(gene);
