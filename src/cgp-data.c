@@ -8,8 +8,8 @@
 //TODO: Need a logging method of some sort...
 
 struct GP_Gene *GP_CGP_alloc(unsigned int num_in,
-		      unsigned int num_mid,
-		      unsigned int num_out)
+			     unsigned int num_mid,
+			     unsigned int num_out)
 {
 	// Make sure we're not doing anything wrong:
 	assert(num_in > 0);

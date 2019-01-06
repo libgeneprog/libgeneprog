@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.9)
 project(geneprog VERSION 0.0.1 DESCRIPTION "Genetic programming library")
 add_library(geneprog SHARED
 	src/cgp-data.c
+	src/bst-data.c
 )
 
 set_target_properties(geneprog PROPERTIES VERSION ${PROJECT_VERSION})
