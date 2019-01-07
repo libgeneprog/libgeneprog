@@ -68,8 +68,37 @@ void GP_BST_free(struct GP_Gene *gene)
 	free(gene);
 }
 
-double _GP_BST_evaluate_node(struct GP_BSTNode *node, double *in)
+double _GP_BST_evaluate_node(struct GP_BSTNode *node,
+			     double *in,
+			     unsigned int num_in)
 {
+	// See what node type we're dealing with:
+	enum GP_BSTNodeType nodeType = node->nodeType;
+
+	if (nodeType == BSTNodeTypeOperand) {
+		// What's our operand?
+		unsigned int operand = node->nodeParams;
+		// What's left/right?
+		double left = _GP_BST_evaluate_node(node->leftNode,
+						    in, num_in);
+		double right = _GP_BST_evaluate_node(node->leftNode,
+						     in, num_in);
+
+		operand = operand % 3;
+		if (operand == 0)
+			return left + right;
+		else if (operand == 1)
+			return left - right;
+		else if (operand == 2)
+			return left * right;
+
+	} else if (nodeType == BSTNodeTypeInput) {
+		// Figure out which input we're using
+		unsigned int inputIdx = node->nodeParams % num_in;
+		return in[inputIdx];
+	}
+
+
 	return 0;
 }
 
@@ -83,7 +112,9 @@ void GP_BST_evaluate(double *in, double *out, void *data)
 
 	// Go through and evaluate each of the trees:
 	for (int i = 0; i < bstdata->num_outputs; i++) {
-		result = _GP_BST_evaluate_node(bstdata->output_nodes[i], in);
+		result = _GP_BST_evaluate_node(bstdata->output_nodes[i],
+					       in,
+					       bstdata->num_inputs);
 		out[i] = result;
 	}
 }
@@ -128,40 +159,38 @@ void GP_BST_randomize(struct GP_Gene *gene)
 					       num_out);
 
 	// Go through and set up our nodes:
-	for(int i=0; i< num_out; i++)
-	{
+	for (int i = 0; i < num_out; i++)
 		bstdata->output_nodes[i] = _GP_BST_random_node(depth);
-	}
 
 }
 
 void _GP_BST_print_node(struct GP_BSTNode *node, int depth)
 {
-	for(int i = 0; i < depth; i++)
+	for (int i = 0; i < depth; i++)
 		printf("\t");
 	printf("Node type: %u\n", node->nodeType);
-	for(int i = 0; i < depth; i++)
+	for (int i = 0; i < depth; i++)
 		printf("\t");
 	printf("Node params: %u\n", node->nodeParams);
-	for(int i = 0; i < depth; i++)
+	for (int i = 0; i < depth; i++)
 		printf("\t");
 	printf("Left Node:\n");
-	if(node->leftNode == NULL) {
-		for(int i = 0; i < depth; i++)
+	if (node->leftNode == NULL) {
+		for (int i = 0; i < depth; i++)
 			printf("\t");
 		printf("NULL\n");
 	} else {
-		_GP_BST_print_node(node -> leftNode, depth+1);
+		_GP_BST_print_node(node->leftNode, depth+1);
 	}
-	for(int i = 0; i < depth; i++)
+	for (int i = 0; i < depth; i++)
 		printf("\t");
 	printf("Right Node:\n");
-	if(node->rightNode == NULL) {
-		for(int i = 0; i < depth; i++)
+	if (node->rightNode == NULL) {
+		for (int i = 0; i < depth; i++)
 			printf("\t");
 		printf("NULL\n");
 	} else {
-		_GP_BST_print_node(node -> rightNode, depth+1);
+		_GP_BST_print_node(node->rightNode, depth+1);
 	}
 }
 
@@ -169,12 +198,13 @@ void GP_BST_print(struct GP_Gene *gene)
 {
 	printf("Pulling out data:\n");
 	struct GP_BSTData *bstdata = (struct GP_BSTData *) gene->data;
+
 	printf("GP_BSTData:\n");
 	printf("num_in: %u\n", bstdata->num_inputs);
 	printf("num_out: %u\n", bstdata->num_outputs);
 	printf("depth: %u\n", bstdata->depth);
 	printf("nodes:\n");
-	for (int i = 0; i < bstdata->num_outputs; i++){
+	for (int i = 0; i < bstdata->num_outputs; i++) {
 		printf("node %u\n", i);
 		_GP_BST_print_node(bstdata->output_nodes[i], 1);
 	}
