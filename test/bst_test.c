@@ -3,7 +3,7 @@
 
 #include "CUnit/CUnit.h"
 #include "CUnit/Basic.h"
-#include "geneprog/bst-data.h"
+#include "bst-data.h"
 
 void _gp_test_bst_alloc(void);
 int _init_suite(void) { return 0; }
