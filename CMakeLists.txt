@@ -27,3 +27,6 @@ install(FILES ${_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/geneprog)
 #Install the pkg-config file
 install(FILES ${CMAKE_BINARY_DIR}/geneprog.pc
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
+
+enable_testing ()
+add_subdirectory (test)
