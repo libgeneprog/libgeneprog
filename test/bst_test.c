@@ -6,19 +6,15 @@
 #include "bst-data.h"
 
 void _gp_test_bst_alloc(void);
-int _init_suite(void) { return 0; }
-int _clean_suite(void) { return 0; }
+int _init_bst_suite(void) { return 0; }
+int _clean_bst_suite(void) { return 0; }
 
 int gp_test_bst_setup_suite(void)
 {
     CU_pSuite pSuite = NULL;
 
-   /* initialize the CUnit test registry */
-   if ( CUE_SUCCESS != CU_initialize_registry() )
-      return CU_get_error();
-
    /* add a suite to the registry */
-   pSuite = CU_add_suite( "bst_test_suite", _init_suite, _clean_suite );
+   pSuite = CU_add_suite( "bst_test_suite", _init_bst_suite, _clean_bst_suite );
    if ( NULL == pSuite ) {
       CU_cleanup_registry();
       return CU_get_error();
