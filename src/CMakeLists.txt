@@ -13,5 +13,21 @@ target_include_directories(geneprog PRIVATE ../include)
 include(GNUInstallDirs)
 # Install library itself
 install(TARGETS geneprog
-	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	LIBRARY 
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	#COMPONENT library
 )
+
+# Since this builds the library, it should also build the library package
+# The end result should be 2 packages, similar to how most *nix stuff is:
+# libgeneprog - the shared library for linking
+# libgeneprog-dev - the headers for developing
+
+SET(CPACK_GENERATOR "DEB")
+set(CPACK_PACKAGE_NAME "libgeneprog")
+set(CPACK_PACKAGE_VENDOR "libgeneprog")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Richard Wardin")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Genetic programming library")
+#set(CPACK_COMPONENTS_ALL library)
+
+include(CPack)
