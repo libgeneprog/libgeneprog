@@ -1,4 +1,8 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
+/**
+ * @file
+ * @brief Contains the main data/functions relating to CGP genes
+ */
 #ifndef _GENEPROG_CGP_DATA_H_
 #define _GENEPROG_CGP_DATA_H_
 
@@ -8,6 +12,10 @@
 extern "C" {
 #endif
 
+/**
+ * A representation of the operation for a given node.
+ * Basically, whether it's addition, subtraction, etc.
+ */
 enum GP_CGPNodeOp {
 	CGPNodeOpAdd,
 	CGPNodeOpSubtract,
@@ -18,12 +26,27 @@ enum GP_CGPNodeOp {
 	CGPNodeOpNumOps //For picking random value
 };
 
+/**
+ * The data for a CGP Gene.
+ */
 struct GP_CGPData {
+	/**
+	 * The number of inputs a gene can take in and use during evaluation.
+	 */
 	unsigned int num_inputs;
+	/**
+	 * The number of nodes between input/output.
+	 * Note that there's no guarantee all/any nodes will be used to
+	 * determine the output.
+	 */
 	unsigned int num_middle_nodes;
+	/**
+	 * The number of outputs the gene should generate when evaluated.
+	 */
 	unsigned int num_outputs;
 
-	//NOTE: Sizes will be num_middle_nodes
+	// NOTE: Sizes will be num_middle_nodes
+	// TODO: Make these use a struct instead (like BST_Node)
 	unsigned int *middle_node_left_sources;
 	unsigned int *middle_node_right_sources;
 	enum GP_CGPNodeOp *middle_node_ops;
