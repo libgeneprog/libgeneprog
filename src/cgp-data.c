@@ -171,3 +171,7 @@ void GP_CGP_randomize(struct GP_Gene *gene)
 
 }
 
+struct GP_Gene *GP_CGP_clone(struct GP_Gene *gene)
+{
+	return NULL;
+}

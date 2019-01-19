@@ -9,6 +9,11 @@ extern "C" {
 
 int gp_test_cgp_setup_suite(void);
 
+int _init_cgp_suite(void);
+int _clean_cgp_suite(void);
+
+void _gp_test_cgp_alloc(void);
+void _gp_test_cgp_clone(void);
 
 #if defined(__cplusplus) || defined(c_plusplus)
 }

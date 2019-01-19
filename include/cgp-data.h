@@ -81,9 +81,25 @@ void GP_CGP_init(struct GP_Gene *gene,
  */
 void GP_CGP_free(struct GP_Gene *gene);
 
+/**
+ * Evaluates the CGP gene against the inputs, providing outputs.
+ * For usage in GP_gene::evaluate
+ * @param in The inputs to evaluate against
+ * @param out An array to store the outputs in. This must be allocated
+ * beforehand.
+ * @param data The data for the CGP gene. Must be GP_CGPData.
+ */
 void GP_CGP_evaluate(double *in, double *out, void *data);
 
+/**
+ * Replaces a CGP gene's nodes with randomly built ones
+ */
 void GP_CGP_randomize(struct GP_Gene *gene);
+
+/**
+ * Makes a deep copy of a given CGP GP_Gene
+ */
+struct GP_Gene *GP_CGP_clone(struct GP_Gene *gene);
 
 #if defined(__cplusplus) || defined(c_plusplus)
 }

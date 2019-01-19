@@ -9,6 +9,11 @@ extern "C" {
 
 int gp_test_bst_setup_suite(void);
 
+int _init_bst_suite(void);
+int _clean_bst_suite(void);
+
+void _gp_test_bst_alloc(void);
+void _gp_test_bst_clone(void);
 
 #if defined(__cplusplus) || defined(c_plusplus)
 }

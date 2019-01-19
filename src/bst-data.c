@@ -209,3 +209,51 @@ void GP_BST_print(struct GP_Gene *gene)
 		_GP_BST_print_node(bstdata->output_nodes[i], 1);
 	}
 }
+
+struct GP_BSTNode *_GP_BST_clone_node(struct GP_BSTNode *source_node)
+{
+	struct GP_BSTNode *cloned_node = NULL;
+
+	if(source_node != NULL) {
+		// Make a new node:
+		cloned_node = (struct GP_BSTNode *)malloc(sizeof(struct GP_BSTNode));
+		cloned_node->nodeType = source_node->nodeType;
+		cloned_node->nodeParams = source_node->nodeParams;
+		cloned_node->leftNode =
+			_GP_BST_clone_node(source_node->leftNode);
+		cloned_node->rightNode =
+			_GP_BST_clone_node(source_node->rightNode);
+	}
+
+	return cloned_node;
+}
+
+struct GP_Gene *GP_BST_clone(struct GP_Gene *source_gene)
+{
+	struct GP_Gene *cloned_gene;
+	struct GP_BSTData *source_data;
+	struct GP_BSTData *cloned_data;
+	struct GP_BSTNode *source_node;
+	unsigned int num_in, num_out, depth;
+
+	// Get the data:
+	source_data = (struct GP_BSTData *) source_gene->data;
+	// Get the params:
+	num_in = source_data->num_inputs;
+	num_out = source_data->num_outputs;
+	depth= source_data->depth;
+
+	// Make a new gene to hold everything:
+	cloned_gene = GP_BST_alloc(num_in, depth, num_out);
+
+	// Set up our output nodes
+	cloned_data = (struct GP_BSTData *) cloned_gene->data;
+	cloned_data->output_nodes = malloc(sizeof(struct GP_BSTNode *) *
+					   num_out);
+	for (int idx = 0; idx < num_out; idx++) {
+		source_node = source_data->output_nodes[idx];
+		cloned_data->output_nodes[idx] = _GP_BST_clone_node(source_node);
+	}
+
+	return cloned_gene;
+}

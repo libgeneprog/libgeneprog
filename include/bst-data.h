@@ -100,11 +100,30 @@ void GP_BST_init(struct GP_Gene *gene,
  */
 void GP_BST_free(struct GP_Gene *gene);
 
+/**
+ * Evaluates the BST gene against the inputs, providing outputs.
+ * For usage in GP_gene::evaluate
+ * @param in The inputs to evaluate against
+ * @param out An array to store the outputs in. This must be allocated
+ * beforehand.
+ * @param data The data for the BST gene. Must be GP_BSTData.
+ */
 void GP_BST_evaluate(double *in, double *out, void *data);
 
+/**
+ * Replaces a BST gene's trees with randomly built ones
+ */
 void GP_BST_randomize(struct GP_Gene *gene);
 
+/**
+ * Prints the BST gene to STDOUT
+ */
 void GP_BST_print(struct GP_Gene *gene);
+
+/**
+ * Makes a deep copy of a given BST GP_Gene
+ */
+struct GP_Gene *GP_BST_clone(struct GP_Gene *source_gene);
 
 #if defined(__cplusplus) || defined(c_plusplus)
 }
