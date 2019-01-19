@@ -77,10 +77,43 @@ void _gp_test_cgp_clone(void)
 	// It'd shouldn't have the same data address as the original gene
 	CU_ASSERT_PTR_NOT_EQUAL(clone_data, original_data);
 
-	// Make sure the non-tree is the same
+	// Make sure the non-nodes the same
 	CU_ASSERT_EQUAL(clone_data->num_inputs, original_data->num_inputs);
 	CU_ASSERT_EQUAL(clone_data->num_outputs, original_data->num_outputs);
 	CU_ASSERT_EQUAL(clone_data->num_middle_nodes,
 		  original_data->num_middle_nodes);
+
+	// Check each of the node data pointers,
+	// make sure they're not null or the same address:
+	CU_ASSERT_PTR_NOT_NULL_FATAL(clone_data->middle_node_left_sources);
+	CU_ASSERT_PTR_NOT_NULL_FATAL(clone_data->middle_node_right_sources);
+	CU_ASSERT_PTR_NOT_NULL_FATAL(clone_data->middle_node_ops);
+	CU_ASSERT_PTR_NOT_NULL_FATAL(clone_data->output_nodes);
+	CU_ASSERT_PTR_NOT_EQUAL(clone_data->middle_node_left_sources,
+				original_data->middle_node_left_sources);
+	CU_ASSERT_PTR_NOT_EQUAL(clone_data->middle_node_right_sources,
+				original_data->middle_node_right_sources);
+	CU_ASSERT_PTR_NOT_EQUAL(clone_data->middle_node_ops,
+				original_data->middle_node_ops);
+	CU_ASSERT_PTR_NOT_EQUAL(clone_data->output_nodes,
+				original_data->output_nodes);
+
+	// Make sure the underlying data is the same:
+	unsigned int num_mid = clone_data->num_middle_nodes;
+	unsigned int num_out = clone_data->num_outputs;
+
+	for (int idx = 0; idx < num_mid; idx++) {
+		CU_ASSERT_EQUAL(clone_data->middle_node_left_sources[idx],
+				original_data->middle_node_left_sources[idx]);
+		CU_ASSERT_EQUAL(clone_data->middle_node_right_sources[idx],
+				original_data->middle_node_right_sources[idx]);
+		CU_ASSERT_EQUAL(clone_data->middle_node_ops[idx],
+				original_data->middle_node_ops[idx]);
+	}
+	for (int idx = 0; idx < num_out; idx++) {
+		CU_ASSERT_EQUAL(clone_data->output_nodes[idx],
+				original_data->output_nodes[idx]);
+	}
+
 
 }

@@ -171,7 +171,45 @@ void GP_CGP_randomize(struct GP_Gene *gene)
 
 }
 
-struct GP_Gene *GP_CGP_clone(struct GP_Gene *gene)
+struct GP_Gene *GP_CGP_clone(struct GP_Gene *source_gene)
 {
-	return NULL;
+	struct GP_Gene *cloned_gene;
+	struct GP_CGPData *source_data;
+	struct GP_CGPData *cloned_data;
+	unsigned int num_in, num_mid, num_out;
+
+	// Get the data:
+	source_data = (struct GP_CGPData *)source_gene->data;
+	num_in = source_data->num_inputs;
+	num_mid = source_data->num_middle_nodes;
+	num_out = source_data->num_outputs;
+
+	// Make our new gene:
+	cloned_gene = GP_CGP_alloc(num_in, num_mid, num_out);
+	cloned_data = (struct GP_CGPData *)cloned_gene->data;
+	// Allocate all the data
+	cloned_data->middle_node_left_sources =
+		malloc(sizeof(unsigned int) * num_mid);
+	cloned_data->middle_node_right_sources =
+		malloc(sizeof(unsigned int) * num_mid);
+	cloned_data->middle_node_ops =
+		malloc(sizeof(enum GP_CGPNodeOp) * num_mid);
+	cloned_data->output_nodes = malloc(sizeof(unsigned int) * num_out);
+
+	// Copy the data over:
+	for (int idx = 0; idx < num_mid; idx++) {
+		cloned_data->middle_node_left_sources[idx] =
+			source_data->middle_node_left_sources[idx];
+		cloned_data->middle_node_right_sources[idx] =
+			source_data->middle_node_right_sources[idx];
+		cloned_data->middle_node_ops[idx] =
+			source_data->middle_node_ops[idx];
+	}
+	for (int idx = 0; idx < num_out; idx++) {
+		cloned_data->output_nodes[idx] =
+			source_data->output_nodes[idx];
+	}
+
+
+	return cloned_gene;
 }
