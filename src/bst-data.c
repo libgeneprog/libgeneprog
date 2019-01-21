@@ -44,6 +44,7 @@ void GP_BST_init(struct GP_Gene *gene,
 	// Set up functions:
 	gene->evaluate = GP_BST_evaluate;
 	gene->clone = GP_BST_clone;
+	gene->free = GP_BST_free;
 }
 
 void _GP_BST_free_node(struct GP_BSTNode *node)

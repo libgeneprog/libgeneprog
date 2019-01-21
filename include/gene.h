@@ -43,6 +43,16 @@ struct GP_Gene {
 	 */
 	struct GP_Gene *(*clone)(struct GP_Gene *gene);
 
+	/**
+	 * Free method for the gene.
+	 * Will take care of properly free'ing up the memory used in gene->data.
+	 * @code
+	 * gene->free(gene);
+	 * @endcode
+	 * @param gene The gene to free
+	 */
+	void (*free)(struct GP_Gene *gene);
+
 };
 
 
