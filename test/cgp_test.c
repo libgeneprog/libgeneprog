@@ -38,8 +38,10 @@ int gp_test_cgp_setup_suite(void)
 void _gp_test_cgp_alloc(void)
 {
 	struct GP_Gene *gene = GP_CGP_alloc(1, 2, 3);
+	// It should not be null:
+	CU_ASSERT_PTR_NOT_NULL_FATAL(gene);
 	// It should not have null data:
-	CU_ASSERT_PTR_NOT_NULL(gene->data);
+	CU_ASSERT_PTR_NOT_NULL_FATAL(gene->data);
 
 	// Get our data for more testing:
 	struct GP_CGPData *cgpdata = (struct GP_CGPData *) gene->data;

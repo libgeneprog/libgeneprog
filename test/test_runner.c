@@ -3,6 +3,7 @@
 #include "CUnit/Basic.h"
 #include "bst_test.h"
 #include "cgp_test.h"
+#include "genepool_test.h"
 
 #include <stdio.h>
 
@@ -16,6 +17,7 @@ int main(void)
 	// Set up the test suites:
 	gp_test_bst_setup_suite();
 	gp_test_cgp_setup_suite();
+	gp_test_genepool_setup_suite();
 
 	// Run them:
 	CU_basic_set_mode(CU_BRM_VERBOSE);
