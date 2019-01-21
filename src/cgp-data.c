@@ -48,6 +48,7 @@ void GP_CGP_init(struct GP_Gene *gene,
 	gene->data = data;
 	// Set up functions:
 	gene->evaluate = GP_CGP_evaluate;
+	gene->clone = GP_CGP_clone;
 }
 
 void GP_CGP_free(struct GP_Gene *gene)

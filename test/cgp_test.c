@@ -40,6 +40,11 @@ void _gp_test_cgp_alloc(void)
 	struct GP_Gene *gene = GP_CGP_alloc(1, 2, 3);
 	// It should not be null:
 	CU_ASSERT_PTR_NOT_NULL_FATAL(gene);
+
+	// It should not have null functions:
+	CU_ASSERT_PTR_NOT_NULL(gene->evaluate);
+	CU_ASSERT_PTR_NOT_NULL(gene->clone);
+
 	// It should not have null data:
 	CU_ASSERT_PTR_NOT_NULL_FATAL(gene->data);
 
@@ -63,6 +68,9 @@ void _gp_test_cgp_clone(void)
 	struct GP_Gene *clone_gene = GP_CGP_clone(original_gene);
 	// It should not be null:
 	CU_ASSERT_PTR_NOT_NULL_FATAL(clone_gene);
+	// It should not have null functions:
+	CU_ASSERT_PTR_NOT_NULL(clone_gene->evaluate);
+	CU_ASSERT_PTR_NOT_NULL(clone_gene->clone);
 	// It should not have null data:
 	CU_ASSERT_PTR_NOT_NULL_FATAL(clone_gene->data);
 

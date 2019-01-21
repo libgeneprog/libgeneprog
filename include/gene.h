@@ -32,6 +32,17 @@ struct GP_Gene {
 	 * @param data The gene's data. Must match the evaluation function
 	 */
 	void (*evaluate)(double *in, double *out, void *data);
+
+	/**
+	 * The clone method for the gene.
+	 * Should do a deep copy of the given gene.
+	 * @code
+	 * GP_Gene *clone = gene->clone(gene);
+	 * @endcode
+	 * @param gene The gene to do a deep copy of.
+	 */
+	struct GP_Gene *(*clone)(struct GP_Gene *gene);
+
 };
 
 
