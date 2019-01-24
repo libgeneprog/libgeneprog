@@ -97,6 +97,13 @@ void GP_CGP_evaluate(double *in, double *out, void *data);
 void GP_CGP_randomize(struct GP_Gene *gene);
 
 /**
+ * Mutates the CGP Gene.
+ * This is a destructive operation. Make sure to clone first.
+ * @see GP_CGP_clone()
+ */
+void GP_CGP_mutate(struct GP_Gene *gene);
+
+/**
  * Makes a deep copy of a given CGP GP_Gene
  */
 struct GP_Gene *GP_CGP_clone(struct GP_Gene *gene);

@@ -44,6 +44,19 @@ struct GP_Gene {
 	struct GP_Gene *(*clone)(struct GP_Gene *gene);
 
 	/**
+	 * The mutate method for the gene.
+	 * Randomly changes elements of the gene.
+	 * This will be a destructive operation, so make sure to clone the gene
+	 * first.
+	 * @code
+	 * gene->mutate(gene);
+	 * @endcode
+	 * @see clone()
+	 * @param gene The gene to mutate
+	 */
+	void (*mutate)(struct GP_Gene *gene);
+
+	/**
 	 * Free method for the gene.
 	 * Will take care of properly free'ing up the memory used in gene->data.
 	 * @code

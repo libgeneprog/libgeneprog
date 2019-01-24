@@ -44,6 +44,7 @@ void _gp_test_cgp_alloc(void)
 	// It should not have null functions:
 	CU_ASSERT_PTR_NOT_NULL(gene->evaluate);
 	CU_ASSERT_PTR_NOT_NULL(gene->clone);
+	CU_ASSERT_PTR_NOT_NULL(gene->mutate);
 	CU_ASSERT_PTR_NOT_NULL(gene->free);
 
 	// It should not have null data:

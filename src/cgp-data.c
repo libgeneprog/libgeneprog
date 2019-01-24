@@ -50,6 +50,7 @@ void GP_CGP_init(struct GP_Gene *gene,
 	gene->evaluate = GP_CGP_evaluate;
 	gene->clone = GP_CGP_clone;
 	gene->free = GP_CGP_free;
+	gene->mutate = GP_CGP_mutate;
 }
 
 void GP_CGP_free(struct GP_Gene *gene)
@@ -170,6 +171,47 @@ void GP_CGP_randomize(struct GP_Gene *gene)
 		source = rand() % (num_in + num_mid);
 		cgpdata->output_nodes[i] = source;
 	}
+}
+
+void GP_CGP_mutate(struct GP_Gene *gene)
+{
+	// Make sure we have a gene:
+	assert(gene != NULL);
+	// And data:
+	assert(gene->data != NULL);
+	struct GP_CGPData *cgpdata = (struct GP_CGPData *) gene->data;
+	unsigned int num_in = cgpdata->num_inputs;
+	unsigned int num_mid = cgpdata->num_middle_nodes;
+	unsigned int num_out = cgpdata->num_outputs;
+
+	// TODO: Make this a constant/configuration:
+	double MUTATION_RATE = 0.2;
+
+	// Go through and set mutate middle nodes:
+	unsigned int source_left, source_right;
+	enum GP_CGPNodeOp op;
+
+	for (int i = 0; i < num_mid; i++) {
+		source_left = rand() % (num_in + i);
+		source_right = rand() % (num_in + i);
+		if ( ((double)rand()) / RAND_MAX < MUTATION_RATE)
+			cgpdata->middle_node_left_sources[i] = source_left;
+		if ( ((double)rand()) / RAND_MAX < MUTATION_RATE)
+			cgpdata->middle_node_right_sources[i] = source_right;
+			op = (enum GP_CGPNodeOp) (rand() % CGPNodeOpNumOps);
+		if ( ((double)rand()) / RAND_MAX < MUTATION_RATE)
+			cgpdata->middle_node_ops[i] = op;
+	}
+
+	// Go through and set up our output nodes:
+	unsigned int source;
+
+	for (int i = 0; i < num_out; i++) {
+		source = rand() % (num_in + num_mid);
+		if ( ((double)rand()) / RAND_MAX < MUTATION_RATE)
+			cgpdata->output_nodes[i] = source;
+	}
+
 
 }
 

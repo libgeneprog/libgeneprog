@@ -68,6 +68,11 @@ void GP_GenePool_evaluate(struct GP_GenePool *genepool,
 			  double **expected_outputs,
 			  double (*fitness)(double**, double**));
 
+/**
+ * Builds the next generation based on the fitnesses in a given genepool
+ */
+void GP_GenePool_build_next_generation(struct GP_GenePool *genepool);
+
 #if defined(__cplusplus) || defined(c_plusplus)
 }
 #endif
