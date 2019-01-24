@@ -15,10 +15,12 @@ int _clean_genepool_suite(void);
 
 // Helper functions
 struct GP_Gene *_gp_cgp_gene_builder(void);
+double _gp_static_fitness(double**, double**);
 
 // Test functions
 void _gp_test_genepool_alloc(void);
 void _gp_test_genepool_genesis_with_builder(void);
+void _gp_test_genepool_evaluate(void);
 
 #if defined(__cplusplus) || defined(c_plusplus)
 }

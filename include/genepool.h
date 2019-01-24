@@ -58,6 +58,16 @@ void GP_GenePool_genesis_with_builder(struct GP_GenePool *genepool,
  */
 void GP_GenePool_genesis(struct GP_GenePool *genepool);
 
+/**
+ * Evaluates a genepool using the provided fitness function
+ */
+void GP_GenePool_evaluate(struct GP_GenePool *genepool,
+			  unsigned int num_rows,
+			  unsigned int num_outputs,
+			  double **inputs,
+			  double **expected_outputs,
+			  double (*fitness)(double**, double**));
+
 #if defined(__cplusplus) || defined(c_plusplus)
 }
 #endif

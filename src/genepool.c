@@ -47,3 +47,32 @@ void GP_GenePool_genesis(struct GP_GenePool *genepool)
 		(genepool->genes)[idx] = genepool->build_gene();
 
 }
+
+void GP_GenePool_evaluate(struct GP_GenePool *genepool,
+			  unsigned int num_rows,
+			  unsigned int num_outputs,
+			  double **inputs,
+			  double **expected_outputs,
+			  double (*fitness)(double**, double**))
+{
+	// Make sure we have a pool first:
+	assert(genepool->genes != NULL);
+
+	// Build a structure to hold our outputs:
+	double **actual_outputs = malloc(sizeof(double *) * num_rows);
+	for (int idx = 0; idx < num_rows; idx++)
+		actual_outputs[idx] = malloc(sizeof(double) * num_outputs);
+
+	// Go through the pool and evaluate:
+	for (int pool_idx = 0; pool_idx < genepool->poolsize; pool_idx++) {
+		for (int row_idx = 0; row_idx < num_rows; row_idx++) {
+			genepool->genes[pool_idx]->evaluate(
+				inputs[row_idx],
+				actual_outputs[row_idx],
+				genepool->genes[pool_idx]->data);
+		}
+		genepool->fitnesses[pool_idx] = fitness(actual_outputs,
+							expected_outputs);
+	}
+
+}
