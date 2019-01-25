@@ -94,6 +94,7 @@ void _gp_test_bst_clone(void)
 	// It should not have null functions:
 	CU_ASSERT_PTR_NOT_NULL(clone_gene->evaluate);
 	CU_ASSERT_PTR_NOT_NULL(clone_gene->clone);
+	CU_ASSERT_PTR_NOT_NULL(clone_gene->mutate);
 	CU_ASSERT_PTR_NOT_NULL(clone_gene->free);
 
 	// It should not have null data:

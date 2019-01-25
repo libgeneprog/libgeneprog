@@ -51,6 +51,7 @@ void GP_CGP_init(struct GP_Gene *gene,
 	gene->clone = GP_CGP_clone;
 	gene->free = GP_CGP_free;
 	gene->mutate = GP_CGP_mutate;
+	gene->as_debug_json = GP_CGP_as_debug_json;
 }
 
 void GP_CGP_free(struct GP_Gene *gene)
@@ -217,6 +218,7 @@ void GP_CGP_mutate(struct GP_Gene *gene)
 
 struct GP_Gene *GP_CGP_clone(struct GP_Gene *source_gene)
 {
+	assert(source_gene != NULL);
 	struct GP_Gene *cloned_gene;
 	struct GP_CGPData *source_data;
 	struct GP_CGPData *cloned_data;
@@ -224,6 +226,7 @@ struct GP_Gene *GP_CGP_clone(struct GP_Gene *source_gene)
 
 	// Get the data:
 	source_data = (struct GP_CGPData *)source_gene->data;
+	assert(source_data != NULL);
 	num_in = source_data->num_inputs;
 	num_mid = source_data->num_middle_nodes;
 	num_out = source_data->num_outputs;
@@ -254,6 +257,42 @@ struct GP_Gene *GP_CGP_clone(struct GP_Gene *source_gene)
 			source_data->output_nodes[idx];
 	}
 
-
 	return cloned_gene;
+}
+
+char *GP_CGP_as_debug_json(struct GP_Gene *gene)
+{
+	//char *buffer;
+	char *buffer = malloc(
+		snprintf(NULL, 0,
+		"{"
+		"'type':'CGPGene',"
+		"'address':'%p',"
+		"'evaluate_function_address':'%p',"
+		"'clone_function_address':'%p',"
+		"'mutate_function_address':'%p',"
+		"'as_debug_json_address':'%p'"
+		"}",
+		gene, // Address
+		gene->evaluate, // Evaluate function address
+		gene->clone, // Clone function address
+		gene->mutate, // Mutate function address
+		gene->as_debug_json // as_debug_json function address
+	     ) + 1);
+	sprintf(buffer,
+		"{"
+		"'type':'CGPGene',"
+		"'address':'%p',"
+		"'evaluate_function_address':'%p',"
+		"'clone_function_address':'%p',"
+		"'mutate_function_address':'%p',"
+		"'as_debug_json_address':'%p'"
+		"}",
+		gene, // Address
+		gene->evaluate, // Evaluate function address
+		gene->clone, // Clone function address
+		gene->mutate, // Mutate function address
+		gene->as_debug_json // as_debug_json function address
+		);
+	return buffer;
 }

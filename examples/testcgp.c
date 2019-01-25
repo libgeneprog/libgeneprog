@@ -17,6 +17,9 @@ int main(void)
 	printf("Randomizing CGP Gene\n");
 	GP_CGP_randomize(gene);
 
+	printf("Printing CGP Gene\n");
+	printf("%s\n",GP_CGP_as_debug_json(gene));
+
 	double in[3] = {1, 2, 3};
 	double out[3];
 

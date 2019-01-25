@@ -1,6 +1,7 @@
 add_library(geneprog SHARED
-	cgp-data.c
 	bst-data.c
+	cgp-data.c
+	genepool.c
 )
 
 set_target_properties(geneprog PROPERTIES VERSION ${PROJECT_VERSION})

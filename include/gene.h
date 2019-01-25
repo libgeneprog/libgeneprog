@@ -66,6 +66,12 @@ struct GP_Gene {
 	 */
 	void (*free)(struct GP_Gene *gene);
 
+	/**
+	 * Gets a JSON representation of the gene. Provides enough info to
+	 * debug.
+	 */
+	char *(*as_debug_json)(struct GP_Gene *gene);
+
 };
 
 

@@ -108,6 +108,11 @@ void GP_CGP_mutate(struct GP_Gene *gene);
  */
 struct GP_Gene *GP_CGP_clone(struct GP_Gene *gene);
 
+/**
+ * Returns a debuggable JSON representation of the gene.
+ */
+char *GP_CGP_as_debug_json(struct GP_Gene *gene);
+
 #if defined(__cplusplus) || defined(c_plusplus)
 }
 #endif

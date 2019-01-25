@@ -24,7 +24,7 @@ struct GP_GenePool {
 	/**
 	 * The number of genes in the pool
 	 */
-	unsigned int poolsize;
+	int poolsize;
 
 	/**
 	 * The fitnesses for a given generation
@@ -42,7 +42,7 @@ struct GP_GenePool {
 /**
  * Builds a genepool
  */
-struct GP_GenePool *GP_GenePool_alloc(unsigned int poolsize);
+struct GP_GenePool *GP_GenePool_alloc(int poolsize);
 
 
 /**
@@ -72,6 +72,11 @@ void GP_GenePool_evaluate(struct GP_GenePool *genepool,
  * Builds the next generation based on the fitnesses in a given genepool
  */
 void GP_GenePool_build_next_generation(struct GP_GenePool *genepool);
+
+/**
+ * Returns a debuggable JSON representation of the genepool.
+ */
+char *GP_GenePool_as_debug_json(struct GP_GenePool *genepool);
 
 #if defined(__cplusplus) || defined(c_plusplus)
 }

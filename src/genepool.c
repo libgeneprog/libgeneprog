@@ -3,8 +3,9 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <stdio.h>
 
-struct GP_GenePool *GP_GenePool_alloc(unsigned int poolsize)
+struct GP_GenePool *GP_GenePool_alloc(int poolsize)
 {
 	assert(poolsize > 0);
 
@@ -33,18 +34,18 @@ void GP_GenePool_genesis(struct GP_GenePool *genepool)
 	// Make sure the builder function is set:
 	assert(genepool->build_gene != NULL);
 
-	unsigned int poolsize = genepool->poolsize;
+	int poolsize = genepool->poolsize;
 
 	// See if we need to allocate fitnesses:
 	if (genepool->fitnesses == NULL)
-		genepool->fitnesses = malloc(sizeof(unsigned int) * poolsize);
+		genepool->fitnesses = malloc(sizeof(double) * poolsize);
 
 	// Allocate our genes:
 	genepool->genes = malloc(sizeof(struct GP_Gene *) * poolsize);
 
 	// Go through and initialize our genes:
 	for (int idx = 0; idx < poolsize; idx++)
-		(genepool->genes)[idx] = genepool->build_gene();
+		genepool->genes[idx] = genepool->build_gene();
 
 }
 
@@ -76,3 +77,118 @@ void GP_GenePool_evaluate(struct GP_GenePool *genepool,
 	}
 
 }
+
+struct GP_Gene* _GP_GenePool_tournament_select(struct GP_GenePool *genepool,
+					       int tournament_size)
+{
+	int poolsize = genepool->poolsize;
+	double best_fitness;
+	int best_idx = -1;
+
+	for (int pos = 0; pos < tournament_size; pos++) {
+		// Pick a random gene:
+		int pool_idx = rand() % poolsize;
+		double pool_fit = genepool->fitnesses[pool_idx];
+		// Is it better than our best gene?
+		if (best_idx == -1 || pool_fit < best_fitness) {
+			best_fitness = pool_fit;
+			best_idx = pool_idx;
+		}
+	}
+
+	return genepool->genes[best_idx];
+}
+
+void GP_GenePool_build_next_generation(struct GP_GenePool *genepool)
+{
+	// Set up a temporary pool:
+	int poolsize = genepool->poolsize;
+	// Allocate our genes:
+	struct GP_Gene **new_pool = malloc(sizeof(struct GP_Gene *) * poolsize);
+
+	// TODO: Make this a configuration parameter
+	int TOURNAMENT_SIZE = 4;
+
+	// Go through each pool slot:
+	for (int idx = 0; idx < poolsize; idx++) {
+		struct GP_Gene* best_gene;
+		best_gene = _GP_GenePool_tournament_select(genepool,
+							   TOURNAMENT_SIZE);
+		assert(best_gene != NULL);
+
+		// We have the best gene from the tournament:
+		// Make a new gene:
+		assert(best_gene->clone != NULL);
+
+		struct GP_Gene* new_gene = best_gene->clone(best_gene);
+
+		new_pool[idx] = new_gene;
+
+		// See if we should mutate:
+		if (((double)rand()) / RAND_MAX < 0.9) {
+			assert(new_pool[idx]->mutate != NULL);
+			new_pool[idx]->mutate(new_pool[idx]);
+		}
+	}
+
+	// We now have a new pool:
+	for (int idx=0; idx < poolsize; idx++)
+		genepool->genes[idx]->free(genepool->genes[idx]);
+
+	genepool->genes = new_pool;
+
+}
+
+
+char *GP_GenePool_as_debug_json(struct GP_GenePool *genepool)
+{
+	char *genebuffer = NULL;
+
+	for (int idx = 0; idx < genepool->poolsize; idx++) {
+		struct GP_Gene *gene = (genepool->genes)[idx];
+		char *temp = NULL;
+		// Should we add a comma?
+		if(idx == 0){
+			temp = malloc(snprintf(NULL, 0, "%s",
+			     gene->as_debug_json(gene)) + 1);
+			sprintf(temp, "%s",
+	      gene->as_debug_json(gene));
+		} else {
+			temp = malloc(snprintf(NULL, 0, "%s,%s",
+			     genebuffer,
+			     gene->as_debug_json(gene)) + 1);
+			sprintf(temp, "%s,%s",
+	      genebuffer,
+	      gene->as_debug_json(gene));
+		}
+		if(genebuffer != NULL)
+			free(genebuffer);
+		genebuffer = temp;
+	}
+
+	char *buffer = malloc(snprintf(NULL, 0,
+		"{"
+		"'address':'%p',"
+		"'poolsize':'%i',"
+		"'genes':'%s',"
+		"}",
+		genepool, // address
+		genepool->poolsize, // Poolsize
+		genebuffer // genes
+				 ) + 1);
+	sprintf(buffer,
+		"{"
+		"'address':'%p',"
+		"'poolsize':'%i',"
+		"'genes':'%s',"
+		"}",
+		genepool, // address
+		genepool->poolsize, // Poolsize
+		genebuffer // genes
+		);
+
+	free(genebuffer);
+	return buffer;
+
+}
+
