@@ -45,6 +45,7 @@ void GP_BST_init(struct GP_Gene *gene,
 	gene->evaluate = GP_BST_evaluate;
 	gene->clone = GP_BST_clone;
 	gene->free = GP_BST_free;
+	gene->mutate = GP_BST_mutate;
 }
 
 void _GP_BST_free_node(struct GP_BSTNode *node)
@@ -212,13 +213,94 @@ void GP_BST_print(struct GP_Gene *gene)
 	}
 }
 
+/**
+ * Calculates the size (num children nodes + self) for the given node
+ */
+int _GP_BST_node_size(struct GP_BSTNode *node)
+{
+	int size = 0;
+
+	if (node != NULL) {
+		int lhs = _GP_BST_node_size(node->leftNode);
+		int rhs = _GP_BST_node_size(node->rightNode);
+
+		// Make sure to count self (hence the +1)
+		size = lhs + rhs + 1;
+	}
+	return size;
+}
+
+void _GP_BST_mutate_node(struct GP_BSTNode *node, int idx)
+{
+	// idx determines which node we're after:
+	// Get *our* size:
+	int node_size = _GP_BST_node_size(node);
+	// If idx is the last one, it's us:
+	if (idx >= node_size - 1) {
+		// It's us
+		// 1) Free left/right:
+		_GP_BST_free_node(node->leftNode);
+		_GP_BST_free_node(node->rightNode);
+		// 2) Pick an op
+		node->nodeType = (enum GP_BSTNodeType)(rand() %
+						       BSTNodeTypeNumTypes);
+		node->nodeParams = rand();
+
+		// 3) See if we need a new left/right:
+		if (node->nodeType == BSTNodeTypeInput) {
+			node->leftNode = NULL;
+			node->rightNode = NULL;
+		} else {
+			// TODO: Pick better numbers for depth:
+			node->leftNode = _GP_BST_random_node(3);
+			node->rightNode = _GP_BST_random_node(3);
+		}
+
+	} else {
+		// Not us.
+		// So it's either left or right
+		int left_size = _GP_BST_node_size(node->leftNode);
+
+		if (idx < left_size) {
+			// It's in the left
+			_GP_BST_mutate_node(node->leftNode, idx);
+		} else {
+			// It's in the right
+			int new_idx = idx - left_size;
+
+			_GP_BST_mutate_node(node->rightNode, new_idx);
+		}
+	}
+}
+
+void GP_BST_mutate(struct GP_Gene *gene)
+{
+	// Alright, mutation time. Pull out the data:
+	struct GP_BSTData *bstdata = (struct GP_BSTData *) gene->data;
+	// Now, we need to pick *which* tree we're going to mutate:
+	unsigned int num_out = bstdata->num_outputs;
+	int tree_idx = rand() % num_out;
+	struct GP_BSTNode *root_node = bstdata->output_nodes[tree_idx];
+	// We have found what tree we're going to mutate
+	// Get the size of that tree:
+	int tree_size = _GP_BST_node_size(root_node);
+	// And figure out which node idx we're going to mutate:
+	int node_idx = rand() % tree_size;
+	// And pass it to mutate_node:
+	_GP_BST_mutate_node(root_node, node_idx);
+}
+
+/**
+ * Clones a given node and all it's children
+ */
 struct GP_BSTNode *_GP_BST_clone_node(struct GP_BSTNode *source_node)
 {
 	struct GP_BSTNode *cloned_node = NULL;
 
-	if(source_node != NULL) {
+	if (source_node != NULL) {
 		// Make a new node:
-		cloned_node = (struct GP_BSTNode *)malloc(sizeof(struct GP_BSTNode));
+		cloned_node =
+			(struct GP_BSTNode *)malloc(sizeof(struct GP_BSTNode));
 		cloned_node->nodeType = source_node->nodeType;
 		cloned_node->nodeParams = source_node->nodeParams;
 		cloned_node->leftNode =
@@ -243,7 +325,7 @@ struct GP_Gene *GP_BST_clone(struct GP_Gene *source_gene)
 	// Get the params:
 	num_in = source_data->num_inputs;
 	num_out = source_data->num_outputs;
-	depth= source_data->depth;
+	depth = source_data->depth;
 
 	// Make a new gene to hold everything:
 	cloned_gene = GP_BST_alloc(num_in, depth, num_out);
@@ -254,7 +336,8 @@ struct GP_Gene *GP_BST_clone(struct GP_Gene *source_gene)
 					   num_out);
 	for (int idx = 0; idx < num_out; idx++) {
 		source_node = source_data->output_nodes[idx];
-		cloned_data->output_nodes[idx] = _GP_BST_clone_node(source_node);
+		cloned_data->output_nodes[idx] =
+			_GP_BST_clone_node(source_node);
 	}
 
 	return cloned_gene;

@@ -121,6 +121,13 @@ void GP_BST_randomize(struct GP_Gene *gene);
 void GP_BST_print(struct GP_Gene *gene);
 
 /**
+ * Mutates the BST Gene.
+ * This is a destructive operation. Make sure to clone first.
+ * @see GP_BST_clone()
+ */
+void GP_BST_mutate(struct GP_Gene *gene);
+
+/**
  * Makes a deep copy of a given BST GP_Gene
  */
 struct GP_Gene *GP_BST_clone(struct GP_Gene *source_gene);
