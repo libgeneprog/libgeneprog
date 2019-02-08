@@ -47,6 +47,9 @@ void _gp_test_cgp_alloc(void)
 	CU_ASSERT_PTR_NOT_NULL(gene->mutate);
 	CU_ASSERT_PTR_NOT_NULL(gene->free);
 
+	// It should have set the proper gene type:
+	CU_ASSERT_EQUAL(gene->geneType, GeneTypeCGP);
+
 	// It should not have null data:
 	CU_ASSERT_PTR_NOT_NULL_FATAL(gene->data);
 

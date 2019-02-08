@@ -33,6 +33,9 @@ void GP_CGP_init(struct GP_Gene *gene,
 	assert(num_mid > 0);
 	assert(num_out > 0);
 
+	// Set the type:
+	gene->geneType = GeneTypeCGP;
+
 	// Set up data:
 	struct GP_CGPData *data = malloc(sizeof(struct GP_CGPData));
 
@@ -56,6 +59,7 @@ void GP_CGP_init(struct GP_Gene *gene,
 
 void GP_CGP_free(struct GP_Gene *gene)
 {
+	assert(gene->geneType == GeneTypeCGP);
 	struct GP_CGPData *cgpdata = (struct GP_CGPData *)(gene->data);
 	// Free the nodes:
 	if (cgpdata->middle_node_left_sources != NULL)
@@ -134,6 +138,7 @@ void GP_CGP_evaluate(double *in, double *out, void *data)
 
 void GP_CGP_randomize(struct GP_Gene *gene)
 {
+	assert(gene->geneType == GeneTypeCGP);
 	struct GP_CGPData *cgpdata = (struct GP_CGPData *) gene->data;
 	unsigned int num_in = cgpdata->num_inputs;
 	unsigned int num_mid = cgpdata->num_middle_nodes;
@@ -176,6 +181,7 @@ void GP_CGP_randomize(struct GP_Gene *gene)
 
 void GP_CGP_mutate(struct GP_Gene *gene)
 {
+	assert(gene->geneType == GeneTypeCGP);
 	// Make sure we have a gene:
 	assert(gene != NULL);
 	// And data:
@@ -218,6 +224,7 @@ void GP_CGP_mutate(struct GP_Gene *gene)
 
 struct GP_Gene *GP_CGP_clone(struct GP_Gene *source_gene)
 {
+	assert(source_gene->geneType == GeneTypeCGP);
 	assert(source_gene != NULL);
 	struct GP_Gene *cloned_gene;
 	struct GP_CGPData *source_data;
@@ -262,6 +269,7 @@ struct GP_Gene *GP_CGP_clone(struct GP_Gene *source_gene)
 
 char *GP_CGP_as_debug_json(struct GP_Gene *gene)
 {
+	assert(gene->geneType == GeneTypeCGP);
 	//char *buffer;
 	char *buffer = malloc(
 		snprintf(NULL, 0,

@@ -11,6 +11,17 @@ extern "C" {
 #endif
 
 /**
+ * The types of genes that are available for GP_Gene
+ */
+enum GP_GeneType {
+	// Hopefully we won't need Unknown that often...
+	GeneTypeUnknown,
+	GeneTypeBST,
+	GeneTypeCGP,
+	GeneTypeNumTypes //For picking random values
+};
+
+/**
  * A generic gene. Can be any number of types (BST, CGP, etc).
  */
 struct GP_Gene {
@@ -19,6 +30,13 @@ struct GP_Gene {
 	 * (BST, CGP, etc).
 	 */
 	void *data;
+
+	/**
+	 * The type of gene this represents.
+	 * Used for verifying functions are being called for the proper genes.
+	 */
+	enum GP_GeneType geneType;
+
 	/**
 	 * The evaluation function for the gene. Will be specific to the gene
 	 * type (BST, CGP, etc).

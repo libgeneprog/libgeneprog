@@ -29,6 +29,9 @@ void GP_BST_init(struct GP_Gene *gene,
 	assert(num_in > 0);
 	assert(num_out > 0);
 
+	// Set the type:
+	gene->geneType = GeneTypeBST;
+
 	// Set up data:
 	struct GP_BSTData *data = malloc(sizeof(struct GP_BSTData));
 
@@ -59,6 +62,7 @@ void _GP_BST_free_node(struct GP_BSTNode *node)
 
 void GP_BST_free(struct GP_Gene *gene)
 {
+	assert(gene->geneType == GeneTypeBST);
 	struct GP_BSTData *bstdata = (struct GP_BSTData *)(gene->data);
 	// Free each of our nodes:
 	if (bstdata->output_nodes != NULL) {
@@ -152,6 +156,7 @@ struct GP_BSTNode *_GP_BST_random_node(int depth)
 
 void GP_BST_randomize(struct GP_Gene *gene)
 {
+	assert(gene->geneType == GeneTypeBST);
 	struct GP_BSTData *bstdata = (struct GP_BSTData *) gene->data;
 	unsigned int num_in = bstdata->num_inputs;
 	unsigned int depth = bstdata->depth;
@@ -199,6 +204,7 @@ void _GP_BST_print_node(struct GP_BSTNode *node, int depth)
 
 void GP_BST_print(struct GP_Gene *gene)
 {
+	assert(gene->geneType == GeneTypeBST);
 	printf("Pulling out data:\n");
 	struct GP_BSTData *bstdata = (struct GP_BSTData *) gene->data;
 
@@ -275,6 +281,7 @@ void _GP_BST_mutate_node(struct GP_BSTNode *node, int idx)
 
 void GP_BST_mutate(struct GP_Gene *gene)
 {
+	assert(gene->geneType == GeneTypeBST);
 	// Alright, mutation time. Pull out the data:
 	struct GP_BSTData *bstdata = (struct GP_BSTData *) gene->data;
 	// Now, we need to pick *which* tree we're going to mutate:
@@ -314,6 +321,7 @@ struct GP_BSTNode *_GP_BST_clone_node(struct GP_BSTNode *source_node)
 
 struct GP_Gene *GP_BST_clone(struct GP_Gene *source_gene)
 {
+	assert(source_gene->geneType == GeneTypeBST);
 	struct GP_Gene *cloned_gene;
 	struct GP_BSTData *source_data;
 	struct GP_BSTData *cloned_data;

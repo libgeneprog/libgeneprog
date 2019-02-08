@@ -4,6 +4,7 @@
 #include "CUnit/CUnit.h"
 #include "CUnit/Basic.h"
 #include "bst-data.h"
+#include "gene.h"
 
 int _init_bst_suite(void) { return 0; }
 int _clean_bst_suite(void) { return 0; }
@@ -45,6 +46,9 @@ void _gp_test_bst_alloc(void)
 	CU_ASSERT_PTR_NOT_NULL(gene->clone);
 	CU_ASSERT_PTR_NOT_NULL(gene->mutate);
 	CU_ASSERT_PTR_NOT_NULL(gene->free);
+
+	// It should have set the proper gene type:
+	CU_ASSERT_EQUAL(gene->geneType, GeneTypeBST);
 
 	// It should not have null data:
 	CU_ASSERT_PTR_NOT_NULL_FATAL(gene->data);
