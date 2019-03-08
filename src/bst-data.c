@@ -49,6 +49,7 @@ void GP_BST_init(struct GP_Gene *gene,
 	gene->clone = GP_BST_clone;
 	gene->free = GP_BST_free;
 	gene->mutate = GP_BST_mutate;
+	gene->as_debug_json = GP_BST_as_debug_json;
 }
 
 void _GP_BST_free_node(struct GP_BSTNode *node)
@@ -350,4 +351,24 @@ struct GP_Gene *GP_BST_clone(struct GP_Gene *source_gene)
 	}
 
 	return cloned_gene;
+}
+
+char *GP_BST_as_debug_json(struct GP_Gene *gene)
+{
+	assert(gene->geneType == GeneTypeBST);
+	char *buffer = malloc(
+		snprintf(NULL, 0,
+		"{"
+		"'type':'BSTGene',"
+		"'address':'%p'",
+		gene
+		) + 1);
+	sprintf(buffer,
+		"{"
+		"'type':'BSTGene',"
+		"'address':'%p'",
+		gene
+		);
+	return buffer;
+
 }

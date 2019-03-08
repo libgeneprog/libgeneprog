@@ -133,6 +133,12 @@ void GP_BST_mutate(struct GP_Gene *gene);
  */
 struct GP_Gene *GP_BST_clone(struct GP_Gene *source_gene);
 
+/**
+ * Returns a debuggable JSON representation of the gene.
+ */
+char *GP_BST_as_debug_json(struct GP_Gene *gene);
+
+
 #if defined(__cplusplus) || defined(c_plusplus)
 }
 #endif
