@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(geneprog VERSION 0.1.1 DESCRIPTION "Genetic programming library")
+project(geneprog VERSION 0.2.1 DESCRIPTION "Genetic programming library")
 
 # ____________________________
 #    /src for building
