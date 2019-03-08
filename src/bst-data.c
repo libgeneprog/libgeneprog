@@ -372,8 +372,10 @@ char *GP_BST_node_debug_json(struct GP_BSTNode *node)
 	} else {
 		char *left = GP_BST_node_debug_json(node->leftNode);
 		char *right= GP_BST_node_debug_json(node->rightNode);
+		assert(left != NULL);
+		assert(right != NULL);
 		const char *nodeType = _GP_BST_node_type_name(node->nodeType);
-		char *buffer = malloc(
+		buffer = malloc(
 			snprintf(NULL, 0,
 			"{"
 			"'left':%s,"
@@ -407,21 +409,62 @@ char *GP_BST_node_debug_json(struct GP_BSTNode *node)
 char *GP_BST_as_debug_json(struct GP_Gene *gene)
 {
 	assert(gene->geneType == GeneTypeBST);
+	struct GP_BSTData *bstdata = (struct GP_BSTData *) gene->data;
+
+	char *nodesJson;
+	nodesJson = malloc(snprintf(NULL, 0, "")+1);
+	sprintf(nodesJson, "");
+	for (int i = 0; i < bstdata->num_outputs; i++) {
+		char *temp;
+		char *nodeJson = GP_BST_node_debug_json(bstdata->output_nodes[i]);
+		char separator;
+		if(i == 0)
+			separator = '[';
+		else
+			separator = ',';
+		temp = malloc(
+			snprintf(NULL, 0,
+			"%s"
+			"%c"
+			"%s",
+			nodesJson,
+			separator,
+			nodeJson
+			) + 1);
+		sprintf(temp,
+			"%s"
+			"%c"
+			"%s",
+			nodesJson,
+			separator,
+			nodeJson
+			);
+		free(nodeJson);
+		free(nodesJson);
+		nodesJson = temp;
+	}
+
+
 	char *buffer = malloc(
 		snprintf(NULL, 0,
 		"{"
 		"'type':'BSTGene',"
 		"'address':'%p'"
+		"'nodes':%s]"
 		"}",
-		gene
+		gene,
+		nodesJson
 		) + 1);
 	sprintf(buffer,
 		"{"
 		"'type':'BSTGene',"
 		"'address':'%p'"
+		"'nodes':%s]"
 		"}",
-		gene
+		gene,
+		nodesJson
 		);
+	free(nodesJson);
 	return buffer;
 
 }
