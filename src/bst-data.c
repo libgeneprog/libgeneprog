@@ -353,19 +353,54 @@ struct GP_Gene *GP_BST_clone(struct GP_Gene *source_gene)
 	return cloned_gene;
 }
 
+const char *_GP_BST_node_type_name(enum GP_BSTNodeType nodeType)
+{
+	switch(nodeType){
+		case BSTNodeTypeOperand:  return "operand";
+		case BSTNodeTypeInput:    return "input";
+		case BSTNodeTypeNumTypes: return "numtypes";
+	}
+}
+
 char *GP_BST_node_debug_json(struct GP_BSTNode *node)
 {
-	char *buffer = malloc(
-		snprintf(NULL, 0,
-		"{"
-		// TODO: Put in node and children nodes
-		"}"
-		) + 1);
-	sprintf(buffer,
-		"{"
-		// TODO: Put in node and children nodes
-		"}"
-	 );
+	char *buffer;
+	if(node == NULL) {
+		// Have to do it as malloc/sprintf so that later frees work
+		buffer = malloc(snprintf(NULL,0,"null")+1);
+		sprintf(buffer, "null");
+	} else {
+		char *left = GP_BST_node_debug_json(node->leftNode);
+		char *right= GP_BST_node_debug_json(node->rightNode);
+		const char *nodeType = _GP_BST_node_type_name(node->nodeType);
+		char *buffer = malloc(
+			snprintf(NULL, 0,
+			"{"
+			"'left':%s,"
+			"'right':%s,"
+			"'nodeType':'%s',"
+			"'nodeParams':%u"
+			"}",
+			left,
+			right,
+			nodeType,
+			node->nodeParams
+			) + 1);
+		sprintf(buffer,
+			"{"
+			"'left':%s,"
+			"'right':%s,"
+			"'nodeType':'%s',"
+			"'nodeParams':%u"
+			"}",
+			left,
+			right,
+			nodeType,
+			node->nodeParams
+		);
+		free(left);
+		free(right);
+	}
 	return buffer;
 }
 

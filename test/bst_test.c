@@ -146,6 +146,10 @@ void _gp_test_bst_clone(void)
 
 void _gp_test_bst_node_debug_json(void)
 {
+	// 1) Test a null node:
+	char *nullNodeData = GP_BST_node_debug_json(NULL);
+	CU_ASSERT_STRING_EQUAL(nullNodeData, "null");
+
 	struct GP_BSTNode *node;
 	node = (struct GP_BSTNode *)malloc(sizeof(struct GP_BSTNode));
 	node->nodeType = BSTNodeTypeInput;
