@@ -377,23 +377,23 @@ char *GP_BST_node_debug_json(struct GP_BSTNode *node)
 		const char *nodeType = _GP_BST_node_type_name(node->nodeType);
 		buffer = malloc(
 			snprintf(NULL, 0,
-			"{"
-			"'left':%s,"
-			"'right':%s,"
-			"'nodeType':'%s',"
-			"'nodeParams':%u"
-			"}",
-			left,
-			right,
-			nodeType,
-			node->nodeParams
+				"{"
+				"\"left\":%s,"
+				"\"right\":%s,"
+				"\"nodeType\":\"%s\","
+				"\"nodeParams\":%u"
+				"}",
+				left,
+				right,
+				nodeType,
+				node->nodeParams
 			) + 1);
 		sprintf(buffer,
 			"{"
-			"'left':%s,"
-			"'right':%s,"
-			"'nodeType':'%s',"
-			"'nodeParams':%u"
+			"\"left\":%s,"
+			"\"right\":%s,"
+			"\"nodeType\":\"%s\","
+			"\"nodeParams\":%u"
 			"}",
 			left,
 			right,
@@ -447,19 +447,19 @@ char *GP_BST_as_debug_json(struct GP_Gene *gene)
 
 	char *buffer = malloc(
 		snprintf(NULL, 0,
-		"{"
-		"'type':'BSTGene',"
-		"'address':'%p'"
-		"'nodes':%s]"
-		"}",
-		gene,
-		nodesJson
+			"{"
+			"\"type\":\"BSTGene\","
+			"\"address\":\"%p\","
+			"\"nodes\":%s]"
+			"}",
+			gene,
+			nodesJson
 		) + 1);
 	sprintf(buffer,
 		"{"
-		"'type':'BSTGene',"
-		"'address':'%p'"
-		"'nodes':%s]"
+		"\"type\":\"BSTGene\","
+		"\"address\":\"%p\","
+		"\"nodes\":%s]"
 		"}",
 		gene,
 		nodesJson
