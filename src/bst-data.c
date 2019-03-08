@@ -258,6 +258,7 @@ void _GP_BST_mutate_node(struct GP_BSTNode *node, int idx)
 			node->rightNode = NULL;
 		} else {
 			// TODO: Pick better numbers for depth:
+			// Ideally we respect max_depth
 			node->leftNode = _GP_BST_random_node(3);
 			node->rightNode = _GP_BST_random_node(3);
 		}

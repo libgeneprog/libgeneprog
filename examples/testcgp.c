@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-//gcc -Wall -o testcgp testcgp.c -lgeneprog
+//gcc -Wall -o testcgp.out testcgp.c -lgeneprog
 #include "geneprog/cgp-data.h"
 
 #include <stdio.h>

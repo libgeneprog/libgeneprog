@@ -65,6 +65,7 @@ struct GP_BSTData {
 	/**
 	 * The max depth allowed for any given tree.
 	 */
+	// TODO: Rename to max_depth
 	unsigned int depth;
 
 	/**

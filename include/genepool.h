@@ -78,6 +78,11 @@ void GP_GenePool_build_next_generation(struct GP_GenePool *genepool);
  */
 char *GP_GenePool_as_debug_json(struct GP_GenePool *genepool);
 
+/**
+ * Returns the fittest gene in the genepool.
+ */
+struct GP_Gene *GP_GenePool_fittest_gene(struct GP_GenePool *genepool);
+
 #if defined(__cplusplus) || defined(c_plusplus)
 }
 #endif

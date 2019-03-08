@@ -192,3 +192,20 @@ char *GP_GenePool_as_debug_json(struct GP_GenePool *genepool)
 
 }
 
+struct GP_Gene *GP_GenePool_fittest_gene(struct GP_GenePool *genepool)
+{
+	int poolsize = genepool->poolsize;
+	double best_fitness;
+	int best_idx = -1;
+
+	for (int pool_idx = 0; pool_idx < poolsize; pool_idx++) {
+		double pool_fit = genepool->fitnesses[pool_idx];
+		// Is it better than our best gene?
+		if (best_idx == -1 || pool_fit < best_fitness) {
+			best_fitness = pool_fit;
+			best_idx = pool_idx;
+		}
+	}
+
+	return genepool->genes[best_idx];
+}

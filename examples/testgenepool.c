@@ -3,6 +3,7 @@
 #include "geneprog/genepool.h"
 #include "geneprog/gene.h"
 #include "geneprog/cgp-data.h"
+#include "geneprog/bst-data.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,11 +12,13 @@
 
 struct GP_Gene *_gp_cgp_gene_builder(void)
 {
-	printf("Building gene\n");
+	//printf("Building gene\n");
 	// In, depth, out
-	struct GP_Gene *gene = GP_CGP_alloc(1, 50, 1);
-	GP_CGP_randomize(gene);
-	printf("%s\n", gene->as_debug_json(gene));
+	//struct GP_Gene *gene = GP_CGP_alloc(1, 50, 1);
+	//GP_CGP_randomize(gene);
+	//printf("%s\n", gene->as_debug_json(gene));
+	struct GP_Gene *gene = GP_BST_alloc(1, 20, 1);
+	GP_BST_randomize(gene);
 	return gene;
 }
 
@@ -71,5 +74,18 @@ int main(void)
 			       _gp_fitness);
 		GP_GenePool_build_next_generation(genepool);
 	}
+
+	printf("Running final fitness:\n");
+	GP_GenePool_evaluate(genepool,
+		       num_rows,
+		       1,
+		       in,
+		       expected_out,
+		       _gp_fitness);
+
+	// Get the most fit gene:
+	struct GP_Gene *bestGene = GP_GenePool_fittest_gene(genepool);
+	printf("Fittest gene:\n");
+	printf("%s\n", bestGene->as_debug_json(bestGene));
 
 }

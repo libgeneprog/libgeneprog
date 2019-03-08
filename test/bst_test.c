@@ -46,6 +46,7 @@ void _gp_test_bst_alloc(void)
 	CU_ASSERT_PTR_NOT_NULL(gene->clone);
 	CU_ASSERT_PTR_NOT_NULL(gene->mutate);
 	CU_ASSERT_PTR_NOT_NULL(gene->free);
+	CU_ASSERT_PTR_NOT_NULL(gene->as_debug_json);
 
 	// It should have set the proper gene type:
 	CU_ASSERT_EQUAL(gene->geneType, GeneTypeBST);
