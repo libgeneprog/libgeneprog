@@ -134,6 +134,11 @@ void GP_BST_mutate(struct GP_Gene *gene);
 struct GP_Gene *GP_BST_clone(struct GP_Gene *source_gene);
 
 /**
+ * Returns a debuggable JSON representation of an individual node.
+ */
+char *GP_BST_node_debug_json(struct GP_BSTNode *gene);
+
+/**
  * Returns a debuggable JSON representation of the gene.
  */
 char *GP_BST_as_debug_json(struct GP_Gene *gene);

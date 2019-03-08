@@ -353,6 +353,22 @@ struct GP_Gene *GP_BST_clone(struct GP_Gene *source_gene)
 	return cloned_gene;
 }
 
+char *GP_BST_node_debug_json(struct GP_BSTNode *node)
+{
+	char *buffer = malloc(
+		snprintf(NULL, 0,
+		"{"
+		// TODO: Put in node and children nodes
+		"}"
+		) + 1);
+	sprintf(buffer,
+		"{"
+		// TODO: Put in node and children nodes
+		"}"
+	 );
+	return buffer;
+}
+
 char *GP_BST_as_debug_json(struct GP_Gene *gene)
 {
 	assert(gene->geneType == GeneTypeBST);
@@ -360,13 +376,15 @@ char *GP_BST_as_debug_json(struct GP_Gene *gene)
 		snprintf(NULL, 0,
 		"{"
 		"'type':'BSTGene',"
-		"'address':'%p'",
+		"'address':'%p'"
+		"}",
 		gene
 		) + 1);
 	sprintf(buffer,
 		"{"
 		"'type':'BSTGene',"
-		"'address':'%p'",
+		"'address':'%p'"
+		"}",
 		gene
 		);
 	return buffer;

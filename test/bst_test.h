@@ -14,6 +14,7 @@ int _clean_bst_suite(void);
 
 void _gp_test_bst_alloc(void);
 void _gp_test_bst_clone(void);
+void _gp_test_bst_node_debug_json(void);
 
 #if defined(__cplusplus) || defined(c_plusplus)
 }

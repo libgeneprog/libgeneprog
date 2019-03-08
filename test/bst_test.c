@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 #include "bst_test.h"
 
+#include <stdlib.h>
 #include "CUnit/CUnit.h"
 #include "CUnit/Basic.h"
 #include "bst-data.h"
@@ -26,6 +27,9 @@ int gp_test_bst_setup_suite(void)
 	if (CU_add_test(pSuite, "_gp_test_bst_alloc", _gp_test_bst_alloc) ==
 	     NULL ||
 	     CU_add_test(pSuite, "_gp_test_bst_clone", _gp_test_bst_clone) ==
+	     NULL ||
+	     CU_add_test(pSuite, "_gp_test_bst_node_debug_json",
+	                 _gp_test_bst_node_debug_json) ==
 	     NULL) {
 		CU_cleanup_registry();
 		return CU_get_error();
@@ -139,3 +143,17 @@ void _gp_test_bst_clone(void)
 	}
 
 }
+
+void _gp_test_bst_node_debug_json(void)
+{
+	struct GP_BSTNode *node;
+	node = (struct GP_BSTNode *)malloc(sizeof(struct GP_BSTNode));
+	node->nodeType = BSTNodeTypeInput;
+
+	char *nodeData = GP_BST_node_debug_json(node);
+
+	CU_ASSERT_PTR_NOT_NULL_FATAL(nodeData);
+	// TODO: Check for elements of that node
+
+}
+
